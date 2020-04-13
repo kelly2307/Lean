@@ -77,7 +77,7 @@ namespace QuantConnect.Lean.Engine.HistoricalData
         /// <summary>
         /// Creates a subscription to process the request
         /// </summary>
-        private Subscription CreateSubscription(HistoryRequest request, DateTime start, DateTime end)
+        protected virtual Subscription CreateSubscription(HistoryRequest request, DateTime start, DateTime end)
         {
             // data reader expects these values in local times
             start = start.ConvertFromUtc(request.ExchangeHours.TimeZone);
@@ -170,6 +170,18 @@ namespace QuantConnect.Lean.Engine.HistoricalData
             });
             var subscriptionRequest = new SubscriptionRequest(false, null, security, config, request.StartTimeUtc, request.EndTimeUtc);
 
+            return CreateSubscription(subscriptionRequest, reader, request);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subscriptionRequest"></param>
+        /// <param name="reader"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        protected virtual Subscription CreateSubscription(SubscriptionRequest subscriptionRequest, IEnumerator<BaseData> reader, HistoryRequest request)
+        {
             if (_parallelHistoryRequestsEnabled)
             {
                 return SubscriptionUtils.CreateAndScheduleWorker(subscriptionRequest, reader);
