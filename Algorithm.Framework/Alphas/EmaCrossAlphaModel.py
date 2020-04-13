@@ -28,8 +28,8 @@ class EmaCrossAlphaModel(AlphaModel):
     '''Alpha model that uses an EMA cross to create insights'''
 
     def __init__(self,
-                 fastPeriod = 12,
-                 slowPeriod = 26,
+                 fastPeriod = 10,
+                 slowPeriod = 100,
                  resolution = Resolution.Daily):
         '''Initializes a new instance of the EmaCrossAlphaModel class
         Args:
